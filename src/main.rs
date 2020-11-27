@@ -1,10 +1,17 @@
-use std::error::Error;
+use std::{error::Error, path::PathBuf};
 use wasmtime::{Engine, Func, Instance, Module, Store};
 
-fn main() -> Result<(), Box<dyn Error>> {
+#[derive(structopt::StructOpt)]
+struct Args {
+  #[structopt(long = "wat", about = "Path to the .wat file")]
+  wat: PathBuf,
+}
+
+#[paw::main]
+fn main(args: Args) -> Result<(), Box<dyn Error>> {
   let engine = Engine::default();
   let store = Store::new(&engine);
-  let module = Module::new(&engine, std::include_str!("./hello.wat"))?;
+  let module = Module::from_file(&engine, args.wat)?;
 
   // First we can create our `log` function, which will simply print out the
   // parameter it receives.
