@@ -1,2 +1,3 @@
 # toy_wasmtime
-Learning Wasmtime Rust API
+
+A CLI for running Wasm modules that draw images in terminal.
