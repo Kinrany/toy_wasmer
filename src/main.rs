@@ -1,4 +1,9 @@
-use std::{error::Error, path::PathBuf};
+use crossterm::{
+  style::{Color, SetBackgroundColor},
+  terminal::EnterAlternateScreen,
+  ExecutableCommand,
+};
+use std::{error::Error, io::stdout, path::PathBuf};
 use wasmtime::{Engine, Func, Instance, Module, Store};
 
 #[derive(structopt::StructOpt)]
@@ -9,6 +14,10 @@ struct Args {
 
 #[paw::main]
 fn main(args: Args) -> Result<(), Box<dyn Error>> {
+  stdout()
+    .execute(EnterAlternateScreen)?
+    .execute(SetBackgroundColor(Color::Green))?;
+
   let engine = Engine::default();
   let store = Store::new(&engine);
   let module = Module::from_file(&engine, args.wat)?;
